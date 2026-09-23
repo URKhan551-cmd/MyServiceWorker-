@@ -259,3 +259,115 @@ Background capabilities
 Push notifications
 
 
+Creating a Service Worker
+
+Create:
+
+sw.js
+
+Example:
+
+console.log("Service Worker loaded");
+
+But simply creating the file does nothing.
+
+The browser needs to be told:
+
+Register this file as a Service Worker.
+
+
+Registering the Service Worker
+
+Inside app.js:
+
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js");
+}
+
+Flow:
+
+app.js
+   │
+   │ register("./sw.js")
+   ▼
+Browser
+   │
+   ▼
+Service Worker Registration
+   │
+   ▼
+sw.js
+
+The browser, not our application, manages the Service Worker's lifecycle.
+
+5. Feature Detection
+
+We check:
+
+"serviceWorker" in navigator
+
+because not every environment necessarily provides the API.
+
+So:
+
+if ("serviceWorker" in navigator) {
+    // Service Worker supported
+}
+
+This prevents our application from assuming the API exists.
+
+
+Service Worker Lifecycle
+
+A Service Worker has a lifecycle.
+
+Simplified:
+
+Registration
+     ↓
+Download
+     ↓
+Install
+     ↓
+Waiting
+     ↓
+Activate
+     ↓
+Active
+
+The browser controls this lifecycle.
+
+Our code responds to lifecycle events
+
+
+Why install and activate are separate
+
+They have different responsibilities.
+
+Install
+
+Think:
+
+"Prepare the new worker."
+
+Download worker
+     ↓
+Install
+     ↓
+Prepare resources
+Activate
+
+Think:
+
+"Make the new worker the active version."
+
+
+Install complete
+     ↓
+Activate
+     ↓
+Worker becomes active
+
+This separation becomes extremely important when updating a PWA.
+
+
